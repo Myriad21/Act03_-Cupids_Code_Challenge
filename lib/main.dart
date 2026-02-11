@@ -22,7 +22,32 @@ class ValentineHome extends StatefulWidget {
   State<ValentineHome> createState() => _ValentineHomeState();
 }
 
-class _ValentineHomeState extends State<ValentineHome> {
+class _ValentineHomeState extends State<ValentineHome> with SingleTickerProviderStateMixin {
+  late final AnimationController _pulseController;
+  late final Animation<double> _pulseAnim;
+  bool isPulsing = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
+
+    _pulseAnim = Tween<double>(begin: 1.0, end: 1.12).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _pulseController.dispose();
+    super.dispose();
+  }
+
+
   final List<String> emojiOptions = ['Sweet Heart', 'Party Heart'];
   String selectedEmoji = 'Sweet Heart';
 
@@ -42,17 +67,43 @@ class _ValentineHomeState extends State<ValentineHome> {
           ),
 
           Image.asset(
-            'assets/images/heart_balloons.webp',
+            'assets/images/bmyvalentine.png',
             width: 200,
             height: 200,
           ),
 
+        // Pulse Start-Stop button
+          ElevatedButton.icon(
+            onPressed: () {
+              setState(() => isPulsing = !isPulsing);
+
+              if (isPulsing) {
+                _pulseController.repeat(reverse: true);
+              } else {
+                _pulseController.stop();
+                _pulseController.reset(); // goes back to scale 1.0
+              }
+            },
+            icon: Icon(isPulsing ? Icons.pause : Icons.play_arrow),
+            label: Text(isPulsing ? 'Stop Pulse' : 'Pulse Heart'),
+          ),
+
+
           const SizedBox(height: 16),
           Expanded(
             child: Center(
-              child: CustomPaint(
-                size: const Size(300, 300),
-                painter: HeartEmojiPainter(type: selectedEmoji),
+              child: AnimatedBuilder(
+                animation: _pulseAnim,
+                builder: (context, child) {
+                  return Transform.scale(
+                    scale: _pulseAnim.value,
+                    child: child,
+                  );
+                },
+                child: CustomPaint(
+                  size: const Size(300, 300),
+                  painter: HeartEmojiPainter(type: selectedEmoji),
+                ),
               ),
             ),
           ),
