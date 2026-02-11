@@ -40,6 +40,13 @@ class _ValentineHomeState extends State<ValentineHome> {
                 .toList(),
             onChanged: (value) => setState(() => selectedEmoji = value ?? selectedEmoji),
           ),
+
+          Image.asset(
+            'assets/images/heart_balloons.webp',
+            width: 200,
+            height: 200,
+          ),
+
           const SizedBox(height: 16),
           Expanded(
             child: Center(
