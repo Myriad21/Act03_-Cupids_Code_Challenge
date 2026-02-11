@@ -94,7 +94,7 @@ class _ValentineHomeState extends State<ValentineHome> with SingleTickerProvider
           Container(
             decoration: const BoxDecoration(
               gradient: RadialGradient(
-                center: Alignment(0, -0.3), // slightly above center
+                center: Alignment(0, -0.3),
                 radius: 1.2,
                 colors: [
                   Color(0xFFFFC1E3), // soft pink
@@ -104,7 +104,7 @@ class _ValentineHomeState extends State<ValentineHome> with SingleTickerProvider
             ),
           ),
 
-          // Your normal UI
+          // UI
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 105),
